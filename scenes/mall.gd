@@ -4,6 +4,9 @@ var escalator_length: float = 200.0
 var floor_size: float = 1000.0
 
 var floor_scene := preload("res://scenes/support/mall_floor.tscn")
+var special_floors: Dictionary = {
+	0: preload("res://scenes/support/mall_floor.tscn")
+}
 
 var current_floor: int = 0
 var loaded_floors: Dictionary = {}
@@ -27,7 +30,11 @@ func get_floor(pos: Vector2) -> int:
 	return floor(pos.y / -(floor_size + escalator_length)) + 1
 
 func load_floor(id: int) -> void:
-	var floor_instance := floor_scene.instantiate()
+	var floor_instance: Node
+	if id not in special_floors:
+		floor_instance = floor_scene.instantiate()
+	else:
+		floor_instance = special_floors[id].instantiate()
 	
 	floor_instance.id = id
 	floor_instance.size = floor_size
